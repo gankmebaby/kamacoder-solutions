@@ -1,0 +1,38 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+int main() {
+	int c,n;
+	//依题意 c代表背包容量 n代表种类数量
+	cin >> c >> n;
+	vector<int> weight(n);
+	vector<int> value(n);
+	vector<int> nums(n);
+	for (int i = 0; i < n; i++) {
+		cin >> weight[i];
+	}
+	for (int i = 0; i < n; i++) {
+		cin >> value[i];
+	}
+	for (int i = 0; i < n; i++) {
+		cin >> nums[i];
+	}
+	//01背包滚动数组 包含初始化
+	vector<int> dp(c + 1, 0);
+
+	//遍历顺序 先遍历物品在遍历背包容量 遍历背包容量时倒序遍历 保证每个物品只放一次
+	for (int i = 0; i < n; i++) {
+		for (int j = c; j >= weight[i]; j--) {
+			//把每种商品遍历的个数放在01背包里面在遍历一遍。
+			for (int k = 1; k <= nums[i] && j - k * weight[i] >= 0; k++) {
+				//遍历物品的个数
+				dp[j] = max(dp[j], dp[j - k * weight[i]] + k * value[i]);
+			}
+		}
+	}
+	cout << dp[c] << endl;
+	return 0;
+}
